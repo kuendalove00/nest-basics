@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, Param, ParseBoolPipe, ParseIntPipe, Post, Query, Req, Res, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseBoolPipe, ParseIntPipe, Post, Query, Req, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { UsersService } from 'src/users/services/users/users.service';
@@ -56,7 +56,7 @@ export class UsersController {
     @UsePipes(new ValidationPipe())
     createUser(@Body() userData: CreateUserDto) {
         console.log(userData);
-        return {};
+        this.userService.createUser(userData);
     }
 
     /*@Get(':id')
@@ -70,7 +70,11 @@ export class UsersController {
     getUserById(@Param('id', ParseIntPipe) id:number)
     {
         console.log(id);
-        return {id}
+        const user = this.userService.fetchUserById(id);
+        if(!user) 
+            throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+        return user;
+
     }
 
     /*@Get()
