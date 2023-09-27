@@ -22,7 +22,7 @@ export class UsersService {
 
     fetchUserById(id: number)
     {
-        //return {id, username: 'Anson', email: 'anson@example.com'}
-        return null;
+        return {id, username: 'Anson', email: 'anson@example.com'}
+        //return null;
     }
 }
